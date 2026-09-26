@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/google_office.dart';
 import '../../domain/usecases/get_offices.dart';
+import '../extensions/office_region_localization.dart';
 import '../widgets/image_fallback.dart';
 
 class DetailPage extends StatelessWidget {
@@ -19,6 +21,8 @@ class DetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -53,13 +57,14 @@ class DetailPage extends StatelessWidget {
               child: Image.network(
                 googleOffice.imageUrl,
                 fit: BoxFit.cover,
-                semanticLabel: 'Foto ilustrasi ${googleOffice.name}',
+                semanticLabel:
+                    localizations.officeImageDescription(googleOffice.name),
                 errorBuilder: (_, __, ___) => const ImageFallback(),
               ),
             ),
             const SizedBox(height: 24),
-            const Text('KANTOR GOOGLE',
-              style: TextStyle(
+            Text(localizations.googleOfficeLabel,
+                style: const TextStyle(
                   color: Color(0xFF287A65),
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
@@ -83,14 +88,14 @@ class DetailPage extends StatelessWidget {
                 ),
                 _OfficeDetailBadge(
                   icon: Icons.public_outlined,
-                  label: googleOffice.region,
+                  label: googleOffice.region.localizedName(localizations),
                 ),
               ],
             ),
             const SizedBox(height: 26),
             const Divider(height: 1),
             const SizedBox(height: 22),
-            Text('Tentang kantor',
+            Text(localizations.aboutOffice,
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 10),
             Text(googleOffice.description,
@@ -108,9 +113,9 @@ class DetailPage extends StatelessWidget {
               child: ListTile(
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                leading: const Icon(Icons.place_outlined,
-                    color: Color(0xFF287A65)),
-                title: const Text('Alamat kantor'),
+                leading:
+                    const Icon(Icons.place_outlined, color: Color(0xFF287A65)),
+                title: Text(localizations.officeAddress),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 5),
                   child: Text(googleOffice.address),
@@ -130,20 +135,23 @@ class DetailPage extends StatelessWidget {
                   ListTile(
                     leading: const Icon(Icons.call_outlined,
                         color: Color(0xFF287A65)),
-                    title: const Text('Nomor telepon'),
-                    subtitle: Text(googleOffice.phoneNumber),
+                    title: Text(localizations.phoneNumber),
+                    subtitle: Text(
+                      googleOffice.phoneNumber ??
+                          localizations.phoneUnavailable,
+                    ),
                   ),
                   const Divider(height: 1, indent: 16, endIndent: 16),
                   ListTile(
                     leading: const Icon(Icons.explore_outlined,
                         color: Color(0xFF287A65)),
-                    title: const Text('Latitude'),
+                    title: Text(localizations.latitude),
                     subtitle: Text(googleOffice.latitude.toStringAsFixed(4)),
                   ),
                   ListTile(
                     leading: const Icon(Icons.explore_outlined,
                         color: Color(0xFF287A65)),
-                    title: const Text('Longitude'),
+                    title: Text(localizations.longitude),
                     subtitle: Text(googleOffice.longitude.toStringAsFixed(4)),
                   ),
                 ],

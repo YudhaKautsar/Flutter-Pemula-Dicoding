@@ -5,6 +5,7 @@ import 'package:google_office_directory/features/offices/data/datasources/local_
 import 'package:google_office_directory/features/offices/data/repositories/office_repository_impl.dart';
 import 'package:google_office_directory/features/offices/presentation/pages/office_detail_page.dart';
 import 'package:google_office_directory/features/offices/domain/usecases/get_offices.dart';
+import 'package:google_office_directory/l10n/generated/app_localizations.dart';
 
 GetOffices buildGetOffices() {
   final dataSource = LocalOfficeDataSource();
@@ -28,6 +29,8 @@ void main() {
     final googleOffice = getOffices().first;
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: DetailPage(
           googleOfficeId: googleOffice.id,
           getOffices: getOffices,
@@ -46,7 +49,8 @@ void main() {
       findsOneWidget,
     );
 
-    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -900));
+    await tester.drag(
+        find.byType(SingleChildScrollView), const Offset(0, -900));
     await tester.pumpAndSettle();
 
     expect(find.text('Longitude'), findsOneWidget);
@@ -81,7 +85,7 @@ void main() {
     expect(offices.map((office) => office.id).toSet(), hasLength(10));
     expect(
       offices.every((office) =>
-          office.phoneNumber.isNotEmpty &&
+          (office.phoneNumber == null || office.phoneNumber!.isNotEmpty) &&
           office.latitude >= -90 &&
           office.latitude <= 90 &&
           office.longitude >= -180 &&
@@ -90,7 +94,8 @@ void main() {
     );
     expect(
       find.byWidgetPredicate(
-        (widget) => widget is ListView && widget.scrollDirection == Axis.vertical,
+        (widget) =>
+            widget is ListView && widget.scrollDirection == Axis.vertical,
       ),
       findsOneWidget,
     );
@@ -114,7 +119,8 @@ void main() {
   testWidgets('search matches office addresses', (tester) async {
     await tester.pumpWidget(buildApp());
 
-    await tester.enterText(find.byType(TextField), '  mapletree business city  ');
+    await tester.enterText(
+        find.byType(TextField), '  mapletree business city  ');
     await tester.pump();
 
     expect(find.text('Google Singapore'), findsOneWidget);

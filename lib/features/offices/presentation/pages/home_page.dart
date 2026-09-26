@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/google_office.dart';
 import '../../domain/usecases/get_offices.dart';
+import '../extensions/office_region_localization.dart';
 import '../widgets/empty_results.dart';
 import '../widgets/google_wordmark.dart';
 import '../widgets/office_tile.dart';
@@ -17,11 +19,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const regions = <String>['Semua', 'Amerika', 'Eropa', 'Asia Pasifik'];
+  static const regionValues = <OfficeRegion?>[
+    null,
+    OfficeRegion.americas,
+    OfficeRegion.europe,
+    OfficeRegion.asiaPacific,
+  ];
 
   final searchController = TextEditingController();
   late final List<GoogleOffice> offices;
-  String selectedRegion = 'Semua';
+  OfficeRegion? selectedRegion;
   String searchQuery = '';
 
   List<GoogleOffice> get filteredOffices {
@@ -29,7 +36,7 @@ class _HomePageState extends State<HomePage> {
 
     return offices.where((office) {
       final matchesRegion =
-          selectedRegion == 'Semua' || office.region == selectedRegion;
+          selectedRegion == null || office.region == selectedRegion;
       final matchesSearch = query.isEmpty ||
           office.name.toLowerCase().contains(query) ||
           office.location.toLowerCase().contains(query) ||
@@ -58,11 +65,10 @@ class _HomePageState extends State<HomePage> {
         PageRouteBuilder<void>(
           transitionDuration: const Duration(milliseconds: 360),
           reverseTransitionDuration: const Duration(milliseconds: 260),
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              DetailPage(
-                googleOfficeId: office.id,
-                getOffices: widget.getOffices,
-              ),
+          pageBuilder: (context, animation, secondaryAnimation) => DetailPage(
+            googleOfficeId: office.id,
+            getOffices: widget.getOffices,
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             final slideAnimation = Tween<Offset>(
               begin: const Offset(0, 1),
@@ -84,6 +90,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final visibleOffices = filteredOffices;
 
     return Scaffold(
@@ -98,11 +105,11 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const GoogleWordmark(),
                   const SizedBox(height: 22),
-                  Text('Kantor Google',
+                  Text(localizations.homeTitle,
                       style: Theme.of(context).textTheme.headlineMedium),
                   const SizedBox(height: 7),
                   Text(
-                    'Jelajahi ruang kerja kami di seluruh dunia.',
+                    localizations.homeSubtitle,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 18),
@@ -110,12 +117,12 @@ class _HomePageState extends State<HomePage> {
                     controller: searchController,
                     onChanged: (value) => setState(() => searchQuery = value),
                     decoration: InputDecoration(
-                      hintText: 'Cari kota atau kantor',
+                      hintText: localizations.searchHint,
                       prefixIcon: const Icon(Icons.search),
                       suffixIcon: searchQuery.isEmpty
                           ? null
                           : IconButton(
-                              tooltip: 'Hapus pencarian',
+                              tooltip: localizations.clearSearch,
                               onPressed: () {
                                 searchController.clear();
                                 setState(() => searchQuery = '');
@@ -136,12 +143,15 @@ class _HomePageState extends State<HomePage> {
                     height: 38,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      itemCount: regions.length,
+                      itemCount: regionValues.length,
                       separatorBuilder: (_, __) => const SizedBox(width: 8),
                       itemBuilder: (context, index) {
-                        final region = regions[index];
+                        final region = regionValues[index];
+                        final regionLabel =
+                            region?.localizedName(localizations) ??
+                                localizations.allRegions;
                         return ChoiceChip(
-                          label: Text(region),
+                          label: Text(regionLabel),
                           selected: selectedRegion == region,
                           onSelected: (_) =>
                               setState(() => selectedRegion = region),
@@ -168,14 +178,14 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.fromLTRB(22, 0, 22, 10),
               child: Row(
                 children: [
-                  Text('LOKASI',
+                  Text(localizations.locationLabel,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             letterSpacing: 1.2,
                             fontWeight: FontWeight.w700,
                             color: const Color(0xFF74797D),
                           )),
                   const Spacer(),
-                  Text('${visibleOffices.length} kantor',
+                  Text(localizations.officeCount(visibleOffices.length),
                       style: Theme.of(context).textTheme.bodyMedium),
                 ],
               ),

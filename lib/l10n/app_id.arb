@@ -1,0 +1,36 @@
+{
+  "@@locale": "id",
+  "appTitle": "Kantor Google",
+  "homeTitle": "Kantor Google",
+  "homeSubtitle": "Jelajahi ruang kerja kami di seluruh dunia.",
+  "searchHint": "Cari kota atau kantor",
+  "clearSearch": "Hapus pencarian",
+  "allRegions": "Semua",
+  "americasRegion": "Amerika",
+  "europeRegion": "Eropa",
+  "asiaPacificRegion": "Asia Pasifik",
+  "locationLabel": "LOKASI",
+  "officeCount": "{count} kantor",
+  "@officeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "emptyResultsTitle": "Kantor tidak ditemukan",
+  "emptyResultsMessage": "Coba kata kunci atau wilayah lain.",
+  "googleOfficeLabel": "KANTOR GOOGLE",
+  "officeImageDescription": "Foto ilustrasi {officeName}",
+  "@officeImageDescription": {
+    "placeholders": {
+      "officeName": {}
+    }
+  },
+  "aboutOffice": "Tentang kantor",
+  "officeAddress": "Alamat kantor",
+  "phoneNumber": "Nomor telepon",
+  "phoneUnavailable": "Kontak publik tidak tersedia",
+  "latitude": "Latitude",
+  "longitude": "Longitude"
+}

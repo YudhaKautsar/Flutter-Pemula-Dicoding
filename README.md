@@ -6,18 +6,21 @@ Halaman `DetailPage` menampilkan nama, foto, alamat, wilayah, nomor telepon, lat
 
 ## Struktur Kode
 
-- `lib/features/offices/domain`: entitas `Office`, kontrak `OfficeRepository`, dan use case `GetOffices`.
+- `lib/features/offices/domain`: entitas `GoogleOffice`, kontrak `OfficeRepository`, dan use case `GetOffices`.
 - `lib/features/offices/data`: sumber data lokal dan implementasi repository.
 - `lib/features/offices/presentation`: `HomePage`, halaman detail, dan widget yang dapat digunakan ulang.
 - `lib/app`: komposisi aplikasi dan tema.
 - `lib/main.dart`: composition root yang menghubungkan data source, repository, dan use case.
 
+## Teks Antarmuka
+
+Teks antarmuka disimpan di `lib/l10n/app_id.arb` dan diakses melalui `AppLocalizations`. Setelah menambahkan atau mengubah teks, perbarui file ARB lalu jalankan `flutter pub get` agar localization dihasilkan ulang. Data nama, alamat, deskripsi, dan gambar kantor tetap berada di local data source sebagai dataset contoh.
+
 ## Menjalankan
 
-Pasang Flutter SDK. Karena folder runner platform belum digenerate di workspace ini, jalankan sekali dari direktori proyek (pilih platform yang akan digunakan):
+Pastikan Flutter SDK terpasang, lalu dari direktori proyek jalankan:
 
 ```sh
-flutter create --platforms=android,web .
 flutter pub get
 flutter run -d chrome
 ```

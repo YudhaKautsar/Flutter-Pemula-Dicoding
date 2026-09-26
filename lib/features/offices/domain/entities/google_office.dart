@@ -1,3 +1,5 @@
+enum OfficeRegion { americas, europe, asiaPacific }
+
 class GoogleOffice {
   const GoogleOffice({
     required this.id,
@@ -17,11 +19,11 @@ class GoogleOffice {
   final String name;
   final String city;
   final String country;
-  final String region;
+  final OfficeRegion region;
   final String address;
   final String imageUrl;
   final String description;
-  final String phoneNumber;
+  final String? phoneNumber;
   final double latitude;
   final double longitude;
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/google_office.dart';
+import '../extensions/office_region_localization.dart';
 import 'image_fallback.dart';
 
 class OfficeTile extends StatelessWidget {
@@ -15,6 +17,8 @@ class OfficeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Material(
       color: Colors.white,
       borderRadius: BorderRadius.circular(12),
@@ -62,7 +66,7 @@ class OfficeTile extends StatelessWidget {
                           const SizedBox(width: 4),
                           Expanded(
                             child: Text(
-                              office.region,
+                              office.region.localizedName(localizations),
                               style: const TextStyle(
                                 color: Color(0xFF287A65),
                                 fontSize: 12,
